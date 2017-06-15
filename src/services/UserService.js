@@ -1,46 +1,55 @@
 const UserModel = require('../models/UserModel');
 const Convert = require('../helpers/Conversion');
+const { serviceError } = require('../helpers/customError');
 
 class UserService {
 
   static list() {
-    return UserModel.list()
-    .then((dbList) => {
-      if (dbList.length === 0) {
-        return dbList;
-      }
-
-      const result = dbList.map(user => ({
-        id: user.id,
-        name: user.name,
-        status: user.status,
-        createdAt: Convert.toUnixEpoch(user.createdAt),
-        updatedAt: Convert.toUnixEpoch(user.updatedAt),
-        deletedAt: Convert.toUnixEpoch(user.deletedAt),
-      }));
-      return result;
-    });
-  }
-
-  static get(data) {
-    return UserModel.get(data)
-      .then(([user]) => {
-        if (user === undefined) {
-          return null;
+    return new Promise(async (resolve, reject) => {
+      try {
+        const list = await UserModel.list();
+        if (!list.length === 0) {
+          resolve([]);
         }
-
-        const result = {
+        const result = list.map(user => ({
           id: user.id,
           name: user.name,
           status: user.status,
           createdAt: Convert.toUnixEpoch(user.createdAt),
           updatedAt: Convert.toUnixEpoch(user.updatedAt),
           deletedAt: Convert.toUnixEpoch(user.deletedAt),
-        };
-        return result;
-      });
+        }));
+        resolve(result);
+      } catch (err) {
+        reject(serviceError('9738818108', err));
+      }
+    });
   }
 
+  static get(data) {
+    return new Promise(async (resolve, reject) => {
+      try {
+        const [user] = UserModel.get(data);
+        if (!user) {
+          resolve([]);
+        }
+
+        const result = [{
+          id: user.id,
+          name: user.name,
+          status: user.status,
+          createdAt: Convert.toUnixEpoch(user.createdAt),
+          updatedAt: Convert.toUnixEpoch(user.updatedAt),
+          deletedAt: Convert.toUnixEpoch(user.deletedAt),
+        }];
+
+        resolve(result);
+      } catch (err) {
+        reject(serviceError('2998861704', err));
+      }
+    });
+  }
+    
   static post(data) {
     return UserModel.post(data);
   }

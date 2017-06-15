@@ -3,71 +3,67 @@ const UserService = require('../services/UserService');
 
 class UserController {
 
-  static list(req, res) {
-    UserService.list()
-      .then((rows) => {
-        res.send({ success: true, data: rows });
-      })
-      .catch((err) => {
-        Logger.throw(res, '3272358416', err);
-      });
+  static async list(req, res) {
+    try {
+      const [list] = await UserService.list();
+      res.send({ success: true, list });
+    } catch (err) {
+      Logger.throw(res, `3272358416${err.number || ''}`, err);
+    }
   }
 
-  static get(req, res) {
-    UserService.get(req.params)
-      .then((user) => {
-        if (!user) {
-          res.send({ success: false, code: '7731668134', message: 'Usuário não encontrado.' });
-          return;
-        }
-        res.send({ success: true, data: user });
-      })
-      .catch((err) => {
-        Logger.throw(res, '6001059324', err);
-      });
+  static async get(req, res) {
+    try {
+      const [user] = await UserService.get(req.params);
+      if (!user) {
+        res.send({ success: false, code: '7731668134', message: 'Usuário não encontrado' });
+        return;
+      }
+      res.send({ success: true, user });
+    } catch (err) {
+      Logger.throw(res, `6001059324${err.number || ''}`, err);
+    }
   }
 
-  static post(req, res) {
-    UserService.post(req.body)
-      .then((ids) => {
-        res.send({ success: true, id: ids[0] });
-      })
-      .catch((err) => {
-        Logger.throw(res, '2365958507', err);
-      });
+  static async post(req, res) {
+    try {
+      const [user] = await UserService.post(req.body);
+      res.send({ success: true, data: user });
+    } catch (err) {
+      Logger.throw(res, `2365958507${err.number || ''}`, err);
+    }
   }
 
-  static put(req, res) {
-    const data = {
-      userId: req.params.userId,
-      name: req.body.name,
-    };
+  static async put(req, res) {
+    try {
+      const data = {
+        userId: req.params.userId,
+        name: req.body.name,
+      };
 
-    UserService.put(data)
-      .then((user) => {
-        if (!user) {
-          res.send({ success: false, code: '7502749763', message: 'Usuário não encontrado.' });
-          return;
-        }
-        res.send({ success: true });
-      })
-      .catch((err) => {
-        Logger.throw(res, '5768905470', err);
-      });
+      const id = await UserService.put(data);
+      if (!id) {
+        res.send({ success: false, code: '7502749763', message: 'Usuário não encontrado' });
+        return;
+      }
+      res.send({ success: true });
+    } catch (err) {
+      Logger.throw(res, `5768905470${err.number || ''}`, err);
+    }
+
   }
 
-  static delete(req, res) {
-    UserService.delete(req.params)
-      .then((user) => {
-        if (!user) {
-          res.send({ success: false, code: '9517673561', message: 'Usuário não encontrado.' });
-          return;
-        }
-        res.send({ success: true });
-      })
-      .catch((err) => {
-        Logger.throw(res, '5768905476', err);
-      });
+  static async delete(req, res) {
+    try {
+      const id = await UserService.delete(req.params);
+      if (!id) {
+        res.send({ success: false, code: '9517673561', message: 'Usuário não encontrado' });
+        return;
+      }
+      res.send({ success: true});
+    } catch (err) {
+      Logger.throw(res, `5768905476${err.number || ''}`, err);
+    }
   }
 
 }

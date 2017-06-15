@@ -36,6 +36,7 @@ class Logger {
   }
 
   static throw(res, code, ...args) {
+    args.code = code;
     this.error(...args);
     res.status(500).send({ success: false, code, message: 'Falha interna do servidor' });
   }
