@@ -1,6 +1,6 @@
 const express = require('express');
-const UserController = require('../controllers/UserController');
-const UserSchema = require('../routes/schemas/UserSchema');
+const UserController = require('./UserController');
+const UserSchema = require('./UserSchema');
 
 const router = express.Router({ mergeParams: true });
 

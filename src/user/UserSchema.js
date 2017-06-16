@@ -1,5 +1,5 @@
 const Joi = require('joi');
-const RouteValidator = require('../../middlewares/RouteValidator');
+const RouteValidator = require('../middlewares/RouteValidator');
 
 class UserSchema extends RouteValidator {
 

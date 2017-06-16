@@ -7,9 +7,6 @@ const helmet = require('helmet');
 const cors = require('cors');
 const bodyParser = require('body-parser');
 
-/* Routes */
-const userRoutes = require('./routes/user');
-
 /* Express initialization */
 const app = express();
 
@@ -27,13 +24,13 @@ app.use(bodyParser.json({
 /* Log express request and response */
 LoggerConfig.expressRequest(app);
 
+/* Instatiate modules */
+app.use('/user', require('./user/user'));
+
 /* Status endpoint */
 app.get('/status', (req, res) => {
   res.send('ok');
 });
-
-/* Instatiate routes */
-app.use('/user', userRoutes);
 
 /* Log errors */
 LoggerConfig.expressError(app);

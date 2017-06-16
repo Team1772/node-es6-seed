@@ -1,11 +1,11 @@
 const Logger = require('../helpers/Logger');
-const UserService = require('../services/UserService');
+const UserService = require('./UserService');
 
 class UserController {
 
   static async list(req, res) {
     try {
-      const [list] = await UserService.list();
+      const list = await UserService.list();
       res.send({ success: true, list });
     } catch (err) {
       Logger.throw(res, `3272358416${err.number || ''}`, err);

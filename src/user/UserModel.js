@@ -1,6 +1,6 @@
 const { utc } = require('moment');
 const knex = require('../config/db');
-const userType = require('../types/user');
+const userType = require('./user.json');
 const { modelError } = require('../helpers/customError');
 
 class UserModel {

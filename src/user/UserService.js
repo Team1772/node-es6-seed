@@ -1,5 +1,6 @@
-const UserModel = require('../models/UserModel');
+const UserModel = require('./UserModel');
 const Convert = require('../helpers/Conversion');
+const userType = require('./user.json');
 const { serviceError } = require('../helpers/customError');
 
 class UserService {
@@ -29,7 +30,7 @@ class UserService {
   static get(data) {
     return new Promise(async (resolve, reject) => {
       try {
-        const [user] = UserModel.get(data);
+        const [user] = await UserModel.get(data);
         if (!user) {
           resolve([]);
         }
@@ -49,8 +50,9 @@ class UserService {
       }
     });
   }
-    
+
   static post(data) {
+    data.status = userType.VALID;
     return UserModel.post(data);
   }
 
